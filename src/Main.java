@@ -15,6 +15,6 @@ public class Main {
             houseList.add(new House(i,x,y));
         }
         Logic logic=new Logic(houseList);
-        logic.findSecondClosestHousePair().print();
+        logic.callMe().print();
     }
 }
