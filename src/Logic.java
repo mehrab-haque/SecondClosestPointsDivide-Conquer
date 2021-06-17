@@ -41,21 +41,31 @@ public class Logic {
     }
 
     //cost########T(n)########
-    public PairPair getClosePairs(List<House> houseList){
+    public PairPair getClosePairs(List<House> xSortedList,List<House> ySortedList){
 
         //Base case
         //cost########1########
-        if(houseList.size()==2)
-            return new PairPair(new HousePair(houseList.get(0),houseList.get(1)));
-        if(houseList.size()==3)
-            return getCloseOfThree(houseList.get(0),houseList.get(1),houseList.get(2));
+        if(xSortedList.size()==2)
+            return new PairPair(new HousePair(xSortedList.get(0),xSortedList.get(1)));
+        if(xSortedList.size()==3)
+            return getCloseOfThree(xSortedList.get(0),xSortedList.get(1),xSortedList.get(2));
 
         //Divide
         //cost########2T(n/2)########
-        List<House> leftHouses=houseList.subList(0,houseList.size()/2);
-        List<House> rightHouses=houseList.subList(houseList.size()/2,houseList.size());
-        PairPair leftPairs=getClosePairs(leftHouses);
-        PairPair rightPairs=getClosePairs(rightHouses);
+        List<House> leftXSorted=xSortedList.subList(0,xSortedList.size()/2);
+        List<House> rightXSorted=xSortedList.subList(xSortedList.size()/2,xSortedList.size());
+        List<House> leftYSorted=new ArrayList<>();
+        List<House> rightYSorted=new ArrayList<>();
+        for(int i=0;i<ySortedList.size();i++) {
+            if (ySortedList.get(i).getX() <= leftXSorted.get(leftXSorted.size() - 1).getX())
+                leftYSorted.add(ySortedList.get(i));
+            else
+                rightYSorted.add(ySortedList.get(i));
+        }
+
+
+        PairPair leftPairs=getClosePairs(leftXSorted,leftYSorted);
+        PairPair rightPairs=getClosePairs(rightXSorted,rightYSorted);
 
         //cost########1########
         List<HousePair> housePairs=new ArrayList<>();
@@ -75,15 +85,15 @@ public class Logic {
         //Calculating x-window
         //cost########n########
         List<House> xWindowList=new ArrayList<>();
-        for(House house:ySortedHouseList)
-            if(Math.abs(house.getX()-rightHouses.get(0).getX())<=pairPair.getSecondClosestPair().getDistance())
+        for(House house:ySortedList)
+            if(Math.abs(house.getX()-rightXSorted.get(0).getX())<=pairPair.getSecondClosestPair().getDistance())
                 xWindowList.add(house);
 
         //cost########n########
         for(int i=0;i<xWindowList.size()-1;i++)
             for(int j=1;j<=7;j++)
                 if(i+j< xWindowList.size()) {
-                    if((leftHouses.contains(xWindowList.get(i)) && rightHouses.contains(xWindowList.get(i+j)) || (leftHouses.contains(xWindowList.get(i+j)) && rightHouses.contains(xWindowList.get(i))))){
+                    if((leftXSorted.contains(xWindowList.get(i)) && rightXSorted.contains(xWindowList.get(i+j)) || (leftXSorted.contains(xWindowList.get(i+j)) && rightXSorted.contains(xWindowList.get(i))))){
                         if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getClosestPair().getDistance()) {
                             pairPair.setSecondClosestPair(pairPair.getClosestPair());
                             pairPair.setClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
@@ -99,6 +109,6 @@ public class Logic {
     }
 
     public HousePair callMe(){
-        return getClosePairs(xSortedHouseList).getSecondClosestPair();
+        return getClosePairs(xSortedHouseList,ySortedHouseList).getSecondClosestPair();
     }
 }
