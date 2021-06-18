@@ -51,7 +51,7 @@ public class Logic {
             return getCloseOfThree(xSortedList.get(0),xSortedList.get(1),xSortedList.get(2));
 
         //Divide
-        //cost########2T(n/2)########
+        //cost########n########
         List<House> leftXSorted=xSortedList.subList(0,xSortedList.size()/2);
         List<House> rightXSorted=xSortedList.subList(xSortedList.size()/2,xSortedList.size());
         List<House> leftYSorted=new ArrayList<>();
@@ -62,6 +62,8 @@ public class Logic {
             else
                 rightYSorted.add(ySortedList.get(i));
         }
+
+        //cost########2T(n/2)########
 
 
         PairPair leftPairs=getClosePairs(leftXSorted,leftYSorted);
@@ -104,11 +106,9 @@ public class Logic {
 
         //########Recurrence Relation########
         //T(n)=2T(n/2)+n+1
-
         return pairPair;
     }
-
-    public HousePair callMe(){
+    public HousePair getSecondClosestPairs(){
         return getClosePairs(xSortedHouseList,ySortedHouseList).getSecondClosestPair();
     }
 }

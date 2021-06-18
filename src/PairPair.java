@@ -12,11 +12,6 @@ public class PairPair {
         this.secondClosestPair=new HousePair();
     }
 
-    public PairPair(){
-        this.closestPair=new HousePair();
-        this.secondClosestPair=new HousePair();
-    }
-
     public HousePair getClosestPair() {
         return closestPair;
     }

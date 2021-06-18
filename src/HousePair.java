@@ -1,9 +1,6 @@
 import java.util.Arrays;
 
 public class HousePair {
-
-    public static double MAX_DISTANCE=30000;
-
     private House[] housePair;
     private double distance;
     public HousePair(House h1, House h2){
@@ -15,7 +12,7 @@ public class HousePair {
 
     public HousePair(){
         housePair=new House[2];
-        distance=MAX_DISTANCE;
+        distance=Double.MAX_VALUE;
     }
 
     public House[] getHousePair() {
