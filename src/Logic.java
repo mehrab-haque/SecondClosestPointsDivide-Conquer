@@ -34,7 +34,9 @@ public class Logic {
         housePairs.sort(new Comparator<HousePair>() {
             @Override
             public int compare(HousePair o1, HousePair o2) {
-                return (int)(o1.getDistance()-o2.getDistance());
+                if(o1.getDistance()<o2.getDistance())
+                    return -1;
+                return 1;
             }
         });
         return new PairPair(housePairs.get(0),housePairs.get(1));
@@ -52,8 +54,8 @@ public class Logic {
 
         //Divide
         //cost########n########
-        List<House> leftXSorted=xSortedList.subList(0,xSortedList.size()/2);
-        List<House> rightXSorted=xSortedList.subList(xSortedList.size()/2,xSortedList.size());
+        List<House> leftXSorted=new ArrayList<>(xSortedList.subList(0,xSortedList.size()/2));
+        List<House> rightXSorted=new ArrayList<>(xSortedList.subList(xSortedList.size()/2,xSortedList.size()));
         List<House> leftYSorted=new ArrayList<>();
         List<House> rightYSorted=new ArrayList<>();
         for(int i=0;i<ySortedList.size();i++) {
@@ -61,6 +63,7 @@ public class Logic {
                 leftYSorted.add(ySortedList.get(i));
             else
                 rightYSorted.add(ySortedList.get(i));
+
         }
 
         //cost########2T(n/2)########
@@ -78,7 +81,9 @@ public class Logic {
         housePairs.sort(new Comparator<HousePair>() {
             @Override
             public int compare(HousePair o1, HousePair o2) {
-                return (int)(o1.getDistance()-o2.getDistance());
+                if(o1.getDistance()<o2.getDistance())
+                    return -1;
+                return 1;
             }
         });
         PairPair pairPair=new PairPair(housePairs.get(0),housePairs.get(1));
@@ -93,15 +98,13 @@ public class Logic {
 
         //cost########n########
         for(int i=0;i<xWindowList.size()-1;i++)
-            for(int j=1;j<=7;j++)
+            for(int j=1;j<=8;j++)
                 if(i+j< xWindowList.size()) {
-                    if((leftXSorted.contains(xWindowList.get(i)) && rightXSorted.contains(xWindowList.get(i+j)) || (leftXSorted.contains(xWindowList.get(i+j)) && rightXSorted.contains(xWindowList.get(i))))){
-                        if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getClosestPair().getDistance()) {
-                            pairPair.setSecondClosestPair(pairPair.getClosestPair());
-                            pairPair.setClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
-                        } else if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getSecondClosestPair().getDistance())
-                            pairPair.setSecondClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
-                    }
+                    if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getClosestPair().getDistance()) {
+                        pairPair.setSecondClosestPair(pairPair.getClosestPair());
+                        pairPair.setClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
+                    } else if (xWindowList.get(i).distance(xWindowList.get(i + j)) > pairPair.getClosestPair().getDistance() && xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getSecondClosestPair().getDistance())
+                        pairPair.setSecondClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
                 }
 
         //########Recurrence Relation########
