@@ -93,19 +93,21 @@ public class Logic {
         //cost########n########
         List<House> xWindowList=new ArrayList<>();
         for(House house:ySortedList)
-            if(Math.abs(house.getX()-rightXSorted.get(0).getX())<=pairPair.getSecondClosestPair().getDistance())
+            if(Math.abs(house.getX()-rightXSorted.get(0).getX())<pairPair.getSecondClosestPair().getDistance())
                 xWindowList.add(house);
 
         //cost########n########
-        for(int i=0;i<xWindowList.size()-1;i++)
-            for(int j=1;j<=8;j++)
-                if(i+j< xWindowList.size()) {
-                    if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getClosestPair().getDistance()) {
-                        pairPair.setSecondClosestPair(pairPair.getClosestPair());
-                        pairPair.setClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
-                    } else if (xWindowList.get(i).distance(xWindowList.get(i + j)) > pairPair.getClosestPair().getDistance() && xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getSecondClosestPair().getDistance())
-                        pairPair.setSecondClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
-                }
+        for(int i=0;i<xWindowList.size()-1;i++) {
+            int j=1;
+            while(i+j<xWindowList.size() && xWindowList.get(i).distance(xWindowList.get(i + j))<pairPair.getSecondClosestPair().getDistance()){
+                if (xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getClosestPair().getDistance()) {
+                    pairPair.setSecondClosestPair(pairPair.getClosestPair());
+                    pairPair.setClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
+                } else if (xWindowList.get(i).distance(xWindowList.get(i + j)) > pairPair.getClosestPair().getDistance() && xWindowList.get(i).distance(xWindowList.get(i + j)) < pairPair.getSecondClosestPair().getDistance())
+                    pairPair.setSecondClosestPair(new HousePair(xWindowList.get(i), xWindowList.get(i + j)));
+                j++;
+            }
+        }
 
         //########Recurrence Relation########
         //T(n)=2T(n/2)+n+1
